@@ -151,6 +151,124 @@ Sistema de remates/subastas desarrollado en Spring Boot que permite la gestión 
 - Auditoría de acciones
 - Encriptación de datos sensibles
 
+## Estructura del Proyecto
+
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── com/
+│   │       └── mkstudios/
+│   │           └── auction_app/
+│   │               ├── AuctionAppApplication.java
+│   │               ├── config/                 # Configuraciones de la aplicación
+│   │               │   ├── security/           # Configuración de seguridad
+│   │               │   ├── websocket/          # Configuración de WebSocket
+│   │               │   └── cache/             # Configuración de caché
+│   │               │
+│   │               ├── domain/                # Capa de dominio
+│   │               │   ├── model/             # Entidades de dominio
+│   │               │   ├── repository/        # Interfaces de repositorio
+│   │               │   ├── service/           # Servicios de dominio
+│   │               │   └── exception/         # Excepciones de dominio
+│   │               │
+│   │               ├── infrastructure/        # Capa de infraestructura
+│   │               │   ├── persistence/       # Implementaciones JPA
+│   │               │   ├── security/          # Implementaciones de seguridad
+│   │               │   ├── messaging/         # Servicios de mensajería
+│   │               │   └── storage/           # Servicios de almacenamiento
+│   │               │
+│   │               ├── application/           # Capa de aplicación
+│   │               │   ├── dto/               # Objetos de transferencia
+│   │               │   ├── mapper/            # Mappers DTO-Entidad
+│   │               │   ├── service/           # Servicios de aplicación
+│   │               │   └── validator/         # Validadores
+│   │               │
+│   │               ├── presentation/          # Capa de presentación
+│   │               │   ├── controller/        # Controladores REST
+│   │               │   ├── websocket/         # Controladores WebSocket
+│   │               │   └── handler/           # Manejadores de eventos
+│   │               │
+│   │               └── common/                # Componentes compartidos
+│   │                   ├── annotation/        # Anotaciones personalizadas
+│   │                   ├── util/              # Utilidades
+│   │                   ├── constant/          # Constantes
+│   │                   └── logging/           # Configuración de logs
+│   │
+│   └── resources/
+│       ├── application.properties            # Propiedades principales
+│       ├── application-dev.properties        # Propiedades de desarrollo
+│       ├── application-prod.properties       # Propiedades de producción
+│       ├── db/
+│       │   └── migration/                    # Migraciones Flyway
+│       ├── static/                           # Recursos estáticos
+│       └── templates/                        # Plantillas (si se usan)
+│
+└── test/
+    └── java/
+        └── com/
+            └── mkstudios/
+                └── auction_app/
+                    ├── unit/                  # Tests unitarios
+                    │   ├── domain/
+                    │   ├── application/
+                    │   └── infrastructure/
+                    │
+                    ├── integration/           # Tests de integración
+                    │   ├── controller/
+                    │   ├── repository/
+                    │   └── service/
+                    │
+                    └── e2e/                   # Tests end-to-end
+```
+
+### Descripción de las Capas
+
+#### 1. Domain (Capa de Dominio)
+- Contiene la lógica de negocio core
+- Entidades, agregados y value objects
+- Interfaces de repositorio
+- Servicios de dominio
+- Eventos de dominio
+
+#### 2. Infrastructure (Capa de Infraestructura)
+- Implementaciones técnicas
+- Adaptadores de persistencia
+- Implementaciones de seguridad
+- Servicios externos
+- Configuraciones técnicas
+
+#### 3. Application (Capa de Aplicación)
+- Casos de uso
+- DTOs y mappers
+- Orquestación de servicios
+- Validaciones
+- Manejo de transacciones
+
+#### 4. Presentation (Capa de Presentación)
+- Controllers REST
+- Controladores WebSocket
+- Manejo de excepciones
+- Validación de entrada
+- Transformación de respuestas
+
+#### 5. Common (Componentes Compartidos)
+- Utilidades
+- Constantes
+- Configuraciones
+- Aspectos transversales
+
+### Patrones Implementados
+
+- **Clean Architecture**: Separación clara de responsabilidades
+- **DDD (Domain-Driven Design)**: Enfoque en el dominio del negocio
+- **CQRS**: Separación de comandos y consultas
+- **Repository Pattern**: Abstracción de la persistencia
+- **DTO Pattern**: Objetos de transferencia de datos
+- **Factory Pattern**: Creación de objetos complejos
+- **Strategy Pattern**: Comportamientos intercambiables
+- **Observer Pattern**: Para eventos y WebSockets
+
 ## Instalación y Configuración
 
 ```bash
@@ -177,4 +295,4 @@ mvn spring-boot:run
 
 ## Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles. 
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE.md para más detalles. 
