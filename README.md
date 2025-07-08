@@ -1,132 +1,112 @@
-# Sistema de Remates Online
+# Auction App
 
-Sistema backend para gestión de remates tanto asíncronos como en vivo vía streaming.
+Sistema de remates/subastas desarrollado en Spring Boot que permite la gestión de remates tanto asíncronos como en vivo.
 
 ## Características Principales
 
-### Tipos de Remates
-- **Remates Asíncronos**: Similar a eBay, con período de tiempo definido
-- **Remates en Vivo**: Streaming en tiempo real con rematador activo
+- Remates asíncronos (tipo eBay)
+- Remates en vivo con WebSockets
+- Sistema de pujas en tiempo real
+- Gestión de usuarios y roles
+- Procesamiento de pagos
+- Reportes y análisis
+- Panel de control para rematadores
 
-### Roles de Usuario
-- **Rematador**: Puede crear y gestionar remates
-- **Comprador**: Puede participar en remates y realizar ofertas
-- **Administrador**: Gestión completa del sistema
+## Planificación del Proyecto
 
-### Funcionalidades Core
+### Sprint 1: Fundamentos y Autenticación
+**Story Points: 21**
+- Configuración inicial del proyecto Spring Boot
+- Implementación de entidades base (Usuario, Remate, Lote, Puja)
+- Sistema de autenticación con JWT y roles (REMATADOR, COMPRADOR, ADMIN)
 
-#### Gestión de Remates
-- Creación y programación de remates
-- Gestión de lotes y sus características
-- Control de estados del remate
-- Manejo de imágenes y metadata
-- Sistema de pujas y ofertas
+### Sprint 2: Remates Asíncronos
+**Story Points: 34**
+- CRUD completo de remates con validaciones
+- CRUD de lotes con manejo de imágenes
+- Sistema de pujas asíncronas con validaciones
+- Notificaciones por email
 
-#### Remates en Vivo
-- Conexión en tiempo real vía WebSockets
-- Panel de control para rematador
-- Sistema de pujas sincrónicas
-- Manejo de estados en tiempo real
-- Recuperación ante fallos
+### Sprint 3: Remates en Vivo - Parte 1
+**Story Points: 29**
+- Configuración de WebSockets con STOMP
+- Sistema de mensajería en tiempo real
+- Sistema de recuperación ante fallos
+- Manejo de estados del remate
 
-#### Sistema de Pujas
-- Validación de montos mínimos
-- Control de incrementos
-- Historial de ofertas
-- Notificaciones en tiempo real
+### Sprint 4: Remates en Vivo - Parte 2
+**Story Points: 29**
+- Panel de control del rematador
+- Sistema de pujas en tiempo real
+- Interfaz de usuario para remates en vivo
+- Manejo de concurrencia y conflictos
 
-### Características Adicionales
-- Sistema de notificaciones
-- Watchlist/Favoritos
-- Estadísticas para rematadores
-- Búsqueda y filtrado avanzado
+### Sprint 5: Pagos y Reportes
+**Story Points: 34**
+- Sistema de pagos y facturación
+- Sistema de reportes y análisis
+- Características avanzadas:
+  - Sistema de recomendaciones
+  - Optimizaciones de rendimiento
+  - Características sociales
+
+### Sprint 6: Seguridad y Despliegue
+**Story Points: 34**
+- Mejoras de seguridad y auditoría
+- Pruebas exhaustivas y calidad
+- Despliegue y monitoreo
+- Documentación completa
 
 ## Arquitectura Técnica
 
-### Tecnologías Principales
+### Backend
 - Spring Boot
-- WebSocket (STOMP)
-- JWT para autenticación
-- Base de datos relacional
-- Redis para caché y sesiones
+- Spring Security + JWT
+- Spring Data JPA
+- WebSocket + STOMP
+- PostgreSQL
 
-### Componentes Principales
+### Frontend
+- React.js
+- Material-UI
+- STOMP.js para WebSocket
+- Redux para estado
 
-#### Remates Asíncronos
-- API REST para operaciones CRUD
-- Sistema de validación de pujas
-- Manejo de estados y transiciones
-- Procesamiento asíncrono de operaciones
-
-#### Remates en Vivo
-- Infraestructura WebSocket
-- Sistema de mensajería en tiempo real
-- Control de concurrencia
-- Manejo de fallos y reconexiones
-
-### Consideraciones de Seguridad
-- Autenticación JWT
-- Autorización basada en roles
-- Rate limiting
-- Validación de operaciones críticas
-- Monitoreo de actividad sospechosa
+### Infraestructura
+- Docker + Kubernetes
+- AWS/GCP para hosting
+- CI/CD con GitHub Actions
+- Monitoreo con ELK Stack
 
 ## Estados del Sistema
 
 ### Estados de Remate
-```
-Asíncrono:
-PROGRAMADO -> EN_CURSO -> FINALIZADO
-           -> CANCELADO
-
-En Vivo:
-PROGRAMADO -> EN_ESPERA -> EN_VIVO -> FINALIZADO
-                       -> PAUSADO  -^
-           -> CANCELADO
-```
+1. PENDIENTE
+2. EN_VIVO
+3. PAUSADO
+4. FINALIZADO
+5. CANCELADO
 
 ### Estados de Lote
-```
-Asíncrono:
-DISPONIBLE -> VENDIDO
-          -> RETIRADO
+1. PENDIENTE
+2. EN_SUBASTA
+3. VENDIDO
+4. NO_VENDIDO
+5. RETIRADO
 
-En Vivo:
-PENDIENTE -> EN_REMATE -> VENDIDO
-                      -> PASADO
-```
-
-## Tareas Pendientes
-
-### Fase 1: Estructura Base
-- [ ] Configuración inicial del proyecto
-- [ ] Implementación de entidades base
-- [ ] Sistema de autenticación y autorización
-- [ ] CRUD básico de remates y lotes
-
-### Fase 2: Sistema de Pujas Asíncronas
-- [ ] Implementación de pujas
-- [ ] Validaciones de negocio
-- [ ] Sistema de notificaciones
-- [ ] Gestión de estados
-
-### Fase 3: Remates en Vivo
-- [ ] Configuración de WebSockets
-- [ ] Implementación de panel de rematador
-- [ ] Sistema de pujas en tiempo real
-- [ ] Manejo de concurrencia y conflictos
-
-### Fase 4: Características Adicionales
-- [ ] Sistema de favoritos
-- [ ] Estadísticas
-- [ ] Búsqueda avanzada
-- [ ] Gestión de archivos
+### Estados de Puja
+1. PENDIENTE
+2. ACEPTADA
+3. SUPERADA
+4. RECHAZADA
+5. GANADORA
 
 ## API Endpoints
 
 ### Autenticación
 - POST /api/auth/login
-- POST /api/auth/refresh
+- POST /api/auth/register
+- POST /api/auth/refresh-token
 
 ### Remates
 - GET /api/remates
@@ -136,49 +116,65 @@ PENDIENTE -> EN_REMATE -> VENDIDO
 - DELETE /api/remates/{id}
 
 ### Lotes
-- GET /api/remates/{remateId}/lotes
-- POST /api/remates/{remateId}/lotes
+- GET /api/lotes
+- POST /api/lotes
 - GET /api/lotes/{id}
 - PUT /api/lotes/{id}
 - DELETE /api/lotes/{id}
 
 ### Pujas
-- POST /api/lotes/{loteId}/pujas
-- GET /api/lotes/{loteId}/pujas
-- GET /api/usuarios/{userId}/pujas
+- GET /api/pujas
+- POST /api/pujas
+- GET /api/pujas/{id}
+- PUT /api/pujas/{id}
 
-### WebSocket Endpoints
+### WebSocket
 - /ws/remate/{remateId}
 - /topic/remate/{remateId}
-- /topic/lote/{loteId}
-- /user/queue/notifications
-
-## Mensajes WebSocket
-
-### Tipos de Mensajes
-```json
-// Puja en vivo
-{
-  "type": "BID",
-  "loteId": "123",
-  "userId": "456",
-  "amount": 1000,
-  "timestamp": "2024-03-21T15:30:00.123Z",
-  "sequenceNumber": 45
-}
-
-// Control de rematador
-{
-  "type": "AUCTIONEER_ACTION",
-  "action": "HAMMER_STRIKE",
-  "loteId": "123",
-  "timestamp": "2024-03-21T15:30:10.000Z"
-}
-```
+- /app/puja
+- /app/control
 
 ## Consideraciones de Escalabilidad
-- Manejo de conexiones WebSocket concurrentes
+
 - Caché distribuida con Redis
-- Rate limiting y protección contra DOS
-- Monitoreo y logging
-- Recuperación ante fallos 
+- Base de datos particionada
+- Balanceo de carga
+- Microservicios para componentes críticos
+- CDN para imágenes y assets
+
+## Seguridad
+
+- Autenticación JWT
+- 2FA para acciones críticas
+- Rate limiting
+- Validación de inputs
+- Auditoría de acciones
+- Encriptación de datos sensibles
+
+## Instalación y Configuración
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/auction-app.git
+
+# Instalar dependencias
+mvn install
+
+# Configurar variables de entorno
+cp .env.example .env
+
+# Ejecutar la aplicación
+mvn spring-boot:run
+```
+
+## Contribución
+
+1. Fork el proyecto
+2. Crea tu Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push al Branch (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles. 
